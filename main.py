@@ -1,7 +1,10 @@
+
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import telegram
-TG_TOKEN="5808341596:AAHSHyUYnpgsMc5DOazWgm2Aq7CmtzT5ZI4"
+from importlib import resources
+from icmplib import ping
 
+TG_TOKEN = ""
 def start(update, context):
     print('user enter start')
     # print(f'{telegram.Bot.send_message('')}')
@@ -30,6 +33,15 @@ def sendReply(update, context):
     bot = telegram.Bot(TG_TOKEN)
     bot.sendMessage(user, replyText)
 def main ():
+
+    global TG_TOKEN
+    with resources.open_text("resources", "secret.properties") as secret:
+        lines = secret.readlines()
+        for line in lines:
+            line = line.strip()
+            if line.split(":")[0] == "TG_TOKEN":
+                TG_TOKEN = line.replace(f"{line.split(':')[0]}:", "")
+    print(TG_TOKEN)
     updater = Updater(TG_TOKEN, use_context=True)
     dispatcher = updater.dispatcher
 
